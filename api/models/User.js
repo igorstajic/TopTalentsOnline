@@ -12,21 +12,15 @@ const userSchema = new db.Schema({
 });
 userSchema.path('email').index({ unique: true });
 
-userSchema.pre(
-  'save',
-  async function(next) {
-    const user = this;
-    if (!user.isModified('password')) {
-      return next();
-    }
-    const hashedPassword = await bcrypt.hash(user.password, 10);
-    user.password = hashedPassword;
-    next();
-  },
-  function(err) {
-    next(err);
+userSchema.pre('save', async function(next) {
+  const user = this;
+  if (!user.isModified('password')) {
+    return next();
   }
-);
+  const hashedPassword = await bcrypt.hash(user.password, 10);
+  user.password = hashedPassword;
+  next();
+});
 
 userSchema.methods.comparePassword = async function(candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);

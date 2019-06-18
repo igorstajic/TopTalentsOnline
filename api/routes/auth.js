@@ -6,8 +6,9 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/User');
 const config = require('../configs/configs')();
+const isAuthenticated = require('../middleware/isAuthenticated');
 
-router.post('/login', async function(req, res, next) {
+router.post('/login', async function(req, res) {
   const schema = Joi.object().keys({
     password: Joi.string()
       .trim()
@@ -23,6 +24,9 @@ router.post('/login', async function(req, res, next) {
 
   try {
     const user = await User.findOne({ email: data.email }).exec();
+    if (!user) {
+      return res.status(401).json({ details: 'Invalid username and password combination!' });
+    }
     const isMatching = await user.comparePassword(data.password);
     if (isMatching) {
       let token = jwt.sign({ uid: user.id }, config.keys.tokenKey, { expiresIn: '24h' });
@@ -31,8 +35,37 @@ router.post('/login', async function(req, res, next) {
       res.status(401).json({ details: 'Invalid username and password combination!' });
     }
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     return res.status(500).json({ details: error });
+  }
+});
+
+router.post('/change-password', isAuthenticated, async (req, res) => {
+  const requestSchema = Joi.object().keys({
+    oldPassword: Joi.string()
+      .trim()
+      .required(),
+    newPassword: Joi.string()
+      .trim()
+      .required(),
+  });
+  const { error: validationError, value: validatedRequestBody } = Joi.validate(req.body, requestSchema);
+  if (validationError) {
+    return res.status(400).json({ details: validationError.details });
+  }
+  try {
+    const isMatching = await req.user.comparePassword(validatedRequestBody.oldPassword);
+
+    if (isMatching) {
+      req.user.password = validatedRequestBody.newPassword;
+      await req.user.save();
+      res.json({ status: 'Pasword updated.' });
+    } else {
+      res.status(500).json({ details: 'Old password is invalid!' });
+    }
+  } catch (error) {
+    // console.error(error);
+    res.status(500).json({ details: error });
   }
 });
 

@@ -10,7 +10,9 @@ mongoose.connect(`mongodb://${config.mongo.host}:${config.mongo.port}/${config.m
 });
 
 const connection = mongoose.connection;
-connection.on('error', console.error.bind(console, 'connection error:'));
+connection.on('error', function(err) {
+  debug(`Error connecting to DB: ${err}`);
+});
 connection.once('open', function() {
   // we're connected!
   debug(`Connected to DB: ${config.mongo.name}`);
