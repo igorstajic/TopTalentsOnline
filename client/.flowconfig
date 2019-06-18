@@ -1,0 +1,12 @@
+[ignore]
+.*/.cache/.*
+.*/dist/.*
+[include]
+
+[libs]
+
+[lints]
+
+[options]
+
+[strict]
