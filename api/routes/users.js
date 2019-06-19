@@ -62,7 +62,11 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
-    res.json({ user: _.pick(user, ['id', 'email', 'firstName', 'lastName', 'city', 'country']) });
+    if (user) {
+      res.json({ user: _.pick(user, ['id', 'email', 'firstName', 'lastName', 'city', 'country']) });
+    } else {
+      res.status(404).json({ details: `User ${req.params.id} is not found!` });
+    }
   } catch (error) {
     console.error(error); //eslint-disable-line
     res.status(500).json({ details: error });

@@ -19,7 +19,7 @@ router.post('/login', async function(req, res) {
   const { error: validationError, value: data } = Joi.validate(req.body, schema);
 
   if (validationError) {
-    return res.status(400).json({ details: validationError.details });
+    return res.status(400).json({ details: validationError.details[0].message });
   }
 
   try {
@@ -68,5 +68,9 @@ router.post('/change-password', isAuthenticated, async (req, res) => {
     res.status(500).json({ details: error });
   }
 });
+
+router.get('/check-user-token', isAuthenticated, (req, res) =>
+  res.json({ user: _.pick(req.user, ['id', 'email', 'firstName', 'lastName']) })
+);
 
 module.exports = router;

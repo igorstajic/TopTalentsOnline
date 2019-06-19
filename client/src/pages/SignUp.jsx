@@ -7,6 +7,8 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import Fade from '@material-ui/core/Fade';
+
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 import RouterLink from '../components/RouterLink';
@@ -100,91 +102,93 @@ export default function SignUp() {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign up
-        </Typography>
-        <form className={classes.form} noValidate onSubmit={onSubmit}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="fname"
-                name="firstName"
-                variant="outlined"
-                required
-                fullWidth
-                id="firstName"
-                label="First Name"
-                autoFocus
-                error={firstNameErrorMessage.length > 0}
-                helperText={firstNameErrorMessage}
-                value={firstName}
-                onChange={ev => setFirstName(ev.target.value)}
-              />
+    <Fade in={true}>
+      <Container component="main" maxWidth="xs">
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign up
+          </Typography>
+          <form className={classes.form} noValidate onSubmit={onSubmit}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  autoComplete="fname"
+                  name="firstName"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="firstName"
+                  label="First Name"
+                  autoFocus
+                  error={firstNameErrorMessage.length > 0}
+                  helperText={firstNameErrorMessage}
+                  value={firstName}
+                  onChange={ev => setFirstName(ev.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="lastName"
+                  label="Last Name"
+                  name="lastName"
+                  autoComplete="lname"
+                  error={lastNameErrorMessage.length > 0}
+                  helperText={lastNameErrorMessage}
+                  value={lastName}
+                  onChange={ev => setLastName(ev.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                  error={emailErrorMessage.length > 0}
+                  helperText={emailErrorMessage}
+                  value={email}
+                  onChange={ev => setEmail(ev.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="current-password"
+                  error={passwordErrorMessage.length > 0}
+                  helperText={passwordErrorMessage}
+                  value={password}
+                  onChange={ev => setPassword(ev.target.value)}
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="lname"
-                error={lastNameErrorMessage.length > 0}
-                helperText={lastNameErrorMessage}
-                value={lastName}
-                onChange={ev => setLastName(ev.target.value)}
-              />
+            <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
+              Sign Up
+            </Button>
+            <Grid container justify="flex-end">
+              <Grid item>
+                <Link component={RouterLink} to="/login" variant="body2">
+                  Already have an account? Sign in
+                </Link>
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                error={emailErrorMessage.length > 0}
-                helperText={emailErrorMessage}
-                value={email}
-                onChange={ev => setEmail(ev.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                error={passwordErrorMessage.length > 0}
-                helperText={passwordErrorMessage}
-                value={password}
-                onChange={ev => setPassword(ev.target.value)}
-              />
-            </Grid>
-          </Grid>
-          <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
-            Sign Up
-          </Button>
-          <Grid container justify="flex-end">
-            <Grid item>
-              <Link component={RouterLink} to="/login" variant="body2">
-                Already have an account? Sign in
-              </Link>
-            </Grid>
-          </Grid>
-        </form>
-      </div>
-    </Container>
+          </form>
+        </div>
+      </Container>
+    </Fade>
   );
 }

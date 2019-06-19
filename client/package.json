@@ -4,10 +4,15 @@
   "description": "TopTalentsOnline is a community web application where you can find IT professionals and contact them",
   "main": "index.js",
   "dependencies": {
+    "@hot-loader/react-dom": "^16.8.6",
     "@material-ui/core": "^4.1.1",
     "@material-ui/icons": "^4.2.0",
+    "axios": "^0.19.0",
+    "core-js": "^3.0.1",
+    "notistack": "^0.8.6",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-hot-loader": "^4.11.1",
     "react-router-dom": "^5.0.1"
   },
   "devDependencies": {
@@ -21,6 +26,9 @@
     "eslint-plugin-react-hooks": "^1.6.0",
     "flow-bin": "^0.102.0-rc",
     "parcel-bundler": "^1.12.3"
+  },
+  "alias": {
+    "react-dom": "@hot-loader/react-dom"
   },
   "scripts": {
     "start": "parcel src/index.html",
