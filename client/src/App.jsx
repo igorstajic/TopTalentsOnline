@@ -13,6 +13,7 @@ import Public from './pages/Public';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import NotFound from './pages/NotFound';
+import EditProfile from './pages/EditProfile';
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -48,12 +49,14 @@ function App() {
           }}
         >
           <CssBaseline />
-          <TopBar user={currentUser} />
+          <TopBar />
           <main>
             <Switch>
               <Route exact path="/" component={Public} />
-              {currentUser ? <Redirect path="/login" to="/" /> : <Route path="/login" component={Login} />}
-              {currentUser ? <Redirect path="/sign-up" to="/" /> : <Route path="/sign-up" component={SignUp} />}
+              <Route path="/login" render={({ history }) => (currentUser ? <Redirect to="/" /> : <Login history={history} />)} />
+              <Route path="/sign-up" render={({ history }) => (currentUser ? <Redirect to="/" /> : <SignUp history={history} />)} />
+              <Route path="/edit-profile" render={({ history }) => (!currentUser ? <Redirect to="/login" /> : <EditProfile history={history} />)} />
+
               <Route component={NotFound} />
             </Switch>
           </main>

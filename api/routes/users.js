@@ -20,16 +20,16 @@ router.post('/register', async (req, res) => {
     lastName: Joi.string()
       .trim()
       .required(),
-    city: Joi.string()
-      .trim()
-      .required(),
-    country: Joi.string()
-      .trim()
-      .required(),
+    // city: Joi.string()
+    //   .trim()
+    //   .required(),
+    // country: Joi.string()
+    //   .trim()
+    //   .required(),
   });
   const { error: validationError, value: validatedRequestBody } = Joi.validate(req.body, requestSchema);
   if (validationError) {
-    return res.status(400).json({ details: validationError.details });
+    return res.status(400).json({ details: validationError.details[0].message });
   }
 
   try {
@@ -92,7 +92,7 @@ router.put('/:id', isAuthenticated, isAllowed, async (req, res) => {
   });
   const { error: validationError, value: validatedRequestBody } = Joi.validate(req.body, requestSchema);
   if (validationError) {
-    return res.status(400).json({ details: validationError.details });
+    return res.status(400).json({ details: validationError.details[0].message });
   }
   try {
     await User.findByIdAndUpdate(req.params.id, _.omit(validatedRequestBody, ['password']), { useFindAndModify: false });

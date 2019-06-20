@@ -1,4 +1,3 @@
-//@flow
 import React, { useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -13,17 +12,18 @@ import RouterLink from '../components/RouterLink';
 import { SessionContext, clearSession } from '../helpers/session';
 import Slide from '@material-ui/core/Slide';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles({
   title: {
     flexGrow: 1,
     textDecoration: 'none',
   },
-}));
+});
 
 export default function TopBar() {
+  const session = useContext(SessionContext);
+
   const classes = useStyles();
   const [menuAnchor, setMenuAnchor] = React.useState(null);
-  const session = useContext(SessionContext);
 
   const handleMenuClose = () => {
     setMenuAnchor(null);

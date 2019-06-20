@@ -1,3 +1,4 @@
+//@flow
 import React, { useState, useEffect, useCallback, useContext } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -132,7 +133,6 @@ function Login({ enqueueSnackbar }: { enqueueSnackbar: Function }) {
               error={passwordErrorMessage.length > 0}
               helperText={passwordErrorMessage}
             />
-            {/* <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" /> */}
             <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
               Sign In
             </Button>

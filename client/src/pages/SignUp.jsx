@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
+//@flow
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -8,10 +9,13 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Fade from '@material-ui/core/Fade';
+import { withSnackbar } from 'notistack';
 
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 import RouterLink from '../components/RouterLink';
+import axios from '../configs/axios';
+import { SessionContext, authenticateSession } from '../helpers/session';
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -38,8 +42,9 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function SignUp() {
+function SignUp({ history, enqueueSnackbar }: { history: Object, enqueueSnackbar: Function }) {
   const classes = useStyles();
+  const session = useContext(SessionContext);
 
   const [firstName, setFirstName] = useState('');
   const [firstNameErrorMessage, setFirstNameErrorMessage] = useState('');
@@ -53,18 +58,20 @@ export default function SignUp() {
   const [password, setPassword] = useState('');
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
 
+  const [passwordConfirmation, setPasswordConfirmation] = useState('');
+  const [passwordConfirmationErrorMessage, setPasswordConfirmationErrorMessage] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const validateInputs = useCallback(() => {
     let isValid = false;
     if (firstName.trim().length === 0) {
-      setFirstNameErrorMessage('Email is required');
+      setFirstNameErrorMessage('First name is required');
     } else {
       setFirstNameErrorMessage('');
       isValid = true;
     }
     if (lastName.trim().length === 0) {
-      setLastNameErrorMessage('Email is required');
+      setLastNameErrorMessage('Last name is required');
     } else {
       setLastNameErrorMessage('');
       isValid = true;
@@ -83,8 +90,15 @@ export default function SignUp() {
       setPasswordErrorMessage('');
     }
 
+    if (password.trim() !== passwordConfirmation.trim()) {
+      setPasswordConfirmationErrorMessage('Passwords must match');
+      isValid = false;
+    } else {
+      setPasswordConfirmationErrorMessage('');
+    }
+
     return isValid;
-  }, [email, firstName, lastName, password]);
+  }, [email, firstName, lastName, password, passwordConfirmation]);
 
   useEffect(() => {
     if (isSubmitted) {
@@ -92,12 +106,30 @@ export default function SignUp() {
     }
   }, [isSubmitted, validateInputs]);
 
-  const onSubmit = event => {
+  const onSubmit = async event => {
     setIsSubmitted(true);
     event.preventDefault();
 
     if (validateInputs()) {
-      console.log(`${email} : ${password}`);
+      try {
+        await axios.post('/users/register', {
+          email,
+          password,
+          firstName,
+          lastName
+        });
+        const authenticationResponse = await authenticateSession(email, password);
+        if (authenticationResponse.user) {
+          session.setCurrentUser(authenticationResponse.user);
+          history.push('/edit-profile');
+
+        } else {
+          enqueueSnackbar(authenticationResponse.error, { variant: 'error' });
+        }
+        enqueueSnackbar('Welcome to TopTalents Online', { variant: 'success' });
+      } catch (error) {
+        enqueueSnackbar(error.response.data.details || 'Something went wrong!', { variant: 'error' });
+      }
     }
   };
 
@@ -152,7 +184,6 @@ export default function SignUp() {
                   id="email"
                   label="Email Address"
                   name="email"
-                  autoComplete="email"
                   error={emailErrorMessage.length > 0}
                   helperText={emailErrorMessage}
                   value={email}
@@ -168,11 +199,25 @@ export default function SignUp() {
                   label="Password"
                   type="password"
                   id="password"
-                  autoComplete="current-password"
                   error={passwordErrorMessage.length > 0}
                   helperText={passwordErrorMessage}
                   value={password}
                   onChange={ev => setPassword(ev.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  name="confirm_password"
+                  label="Confirm Password"
+                  type="password"
+                  id="confirm_password"
+                  error={passwordConfirmationErrorMessage.length > 0}
+                  helperText={passwordConfirmationErrorMessage}
+                  value={passwordConfirmation}
+                  onChange={ev => setPasswordConfirmation(ev.target.value)}
                 />
               </Grid>
             </Grid>
@@ -192,3 +237,5 @@ export default function SignUp() {
     </Fade>
   );
 }
+
+export default withSnackbar(SignUp);
