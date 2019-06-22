@@ -41,6 +41,9 @@ const useStyles = makeStyles(theme => ({
   categoriesContainer: {
     paddingTop: theme.spacing(4),
   },
+  deleteActionContainer: {
+    paddingTop: theme.spacing(4),
+  },
 }));
 
 const actions = {
@@ -265,7 +268,7 @@ function InfoForm({ enqueueSnackbar, profileData }: { profileData: Object, enque
           Save Changes
         </Button>
       </form>
-      <Grid container justify="flex-end">
+      <Grid className={classes.deleteActionContainer} container justify="flex-end">
         <Grid item>
           <Button
             onClick={() => dispatch({ type: actions.TOGGLE_DELETE_DIALOG })}

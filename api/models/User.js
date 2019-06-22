@@ -5,13 +5,13 @@ const _ = require('lodash');
 const userSchema = new db.Schema({
   firstName: 'string',
   lastName: 'string',
-  email: { type: String, unique: true },
+  email: { type: String, unique: true, lowercase: true, trim: true },
   city: 'string',
   country: 'string',
   password: 'string',
   type: 'string',
-  categories: 'array',
-  subCategories: 'array',
+  categories: [{ type: String, lowercase: true, trim: true }],
+  subCategories: [{ type: String, lowercase: true, trim: true }],
 });
 userSchema.path('email').index({ unique: true });
 

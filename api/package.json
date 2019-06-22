@@ -3,25 +3,31 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
-    "dev": "nodemon ./bin/www",
-    "debug": "nodemon --inspect ./bin/www"
+    "start": "NODE_ENV=local node ./bin/www",
+    "dev": "NODE_ENV=local nodemon ./bin/www",
+    "debug": "NODE_ENV=local nodemon --inspect ./bin/www",
+    "test": "LOG_LEVEL=error SILENCE_ERRORS=true NODE_ENV=test jest  --verbose --bail --runInBand --forceExit",
+    "test:dev": "NODE_ENV=test jest --detectOpenHandles --forceExit --verbose --bail --runInBand"
   },
   "dependencies": {
     "@hapi/joi": "^15.0.3",
     "bcrypt": "^3.0.6",
     "cookie-parser": "~1.4.3",
     "cors": "^2.8.5",
-    "debug": "~2.6.9",
     "dotenv": "^8.0.0",
     "express": "~4.16.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.11",
     "mongoose": "^5.6.0",
-    "morgan": "~1.9.0"
+    "morgan": "~1.9.0",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "eslint": "^5.16.0",
-    "nodemon": "^1.19.1"
+    "eslint-plugin-jest": "^22.7.1",
+    "jest": "^24.8.0",
+    "nodemon": "^1.19.1",
+    "superagent": "^5.1.0",
+    "supertest": "^4.0.2"
   }
 }

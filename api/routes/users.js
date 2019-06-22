@@ -30,7 +30,7 @@ router.post('/register', async (req, res) => {
     const response = await newUser.save();
     res.json({ user: { id: response.id } });
   } catch (error) {
-    console.error(error); //eslint-disable-line
+    logger.error(error);
     if (error.name === 'MongoError') {
       if (error.code === 11000) {
         return res.status(400).json({ details: `'${validatedRequestBody.email}' is already in use.` });
@@ -48,7 +48,7 @@ router.get('/', async (req, res) => {
       users: users.map(user => user.toClient()),
     });
   } catch (error) {
-    console.error(error); //eslint-disable-line
+    logger.error(error);
     res.status(500).json({ details: error });
   }
 });
@@ -65,7 +65,7 @@ router.get('/:id', async (req, res) => {
       res.status(404).json({ details: `User ${req.params.id} is not found!` });
     }
   } catch (error) {
-    console.error(error); //eslint-disable-line
+    logger.error(error);
     res.status(500).json({ details: error });
   }
 });
@@ -94,7 +94,7 @@ router.put('/:id', isAuthenticated, isAllowed, async (req, res) => {
     await User.findByIdAndUpdate(req.params.id, validatedRequestBody, { useFindAndModify: false });
     res.json({ status: 'updated' });
   } catch (error) {
-    console.error(error); //eslint-disable-line
+    logger.error(error);
     res.status(500).json({ details: error });
   }
 });
@@ -105,7 +105,7 @@ router.delete('/:id', isAuthenticated, isAllowed, async (req, res) => {
     await User.findByIdAndRemove(req.params.id, { useFindAndModify: false });
     res.json({ status: 'deleted' });
   } catch (error) {
-    console.error(error); //eslint-disable-line
+    logger.error(error);
     res.status(500).json({ details: error });
   }
 });

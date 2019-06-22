@@ -1,9 +1,20 @@
-require('dotenv').config();
+const dotenv = require('dotenv');
+
+if (process.env.NODE_ENV) {
+  dotenv.config({
+    path: `./.env.${process.env.NODE_ENV}`,
+  });
+} else {
+  throw new Error('NODE_ENV must be defined');
+}
+
+const { logger } = require('./configs/logger');
+global.logger = logger;
 
 const express = require('express');
 // const path = require('path');
 // const cookieParser = require('cookie-parser');
-const logger = require('morgan');
+const morgan = require('morgan');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -14,7 +25,7 @@ const cors = require('cors');
 
 app.use(cors());
 
-app.use(logger('dev'));
+app.use(morgan('dev'));
 app.use(express.json());
 // app.use(express.urlencoded({ extended: false }));
 // app.use(cookieParser());

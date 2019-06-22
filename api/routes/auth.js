@@ -29,7 +29,7 @@ router.post('/login', async function(req, res) {
     }
     const isMatching = await user.comparePassword(data.password);
     if (isMatching) {
-      let token = jwt.sign({ uid: user.id }, config.keys.tokenKey, { expiresIn: '24h' });
+      let token = jwt.sign({ uid: user.id }, config.keys.tokenKey, { expiresIn: config.keys.tokenExpiresIn });
       res.json({ user: _.pick(user, ['email', 'firstName', 'lastName', 'id']), token });
     } else {
       res.status(401).json({ details: 'Invalid username and password combination!' });

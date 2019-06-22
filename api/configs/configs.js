@@ -2,7 +2,6 @@ module.exports = () => ({
   app: {
     name: process.env.APP_NAME,
     port: process.env.APP_PORT || 8000,
-    environment: process.env.NODE_ENV,
   },
   mongo: {
     port: process.env.DB_PORT,
@@ -13,5 +12,9 @@ module.exports = () => ({
   },
   keys: {
     tokenKey: process.env.TOKEN_KEY,
+    tokenExpiresIn: process.env.TOKEN_EXPIRES_IN
   },
+  logs: {
+    level: process.env.LOG_LEVEL
+  }
 });
