@@ -1,0 +1,15 @@
+export default [
+  'React',
+  'Angular',
+  'Python',
+  'Rails',
+  'Node.js',
+  'Go',
+  'Oracle',
+  'SQL Server',
+  'ETL',
+  'Data',
+  'Machine Learning',
+  'iOS',
+  'Android',
+];

@@ -9,7 +9,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import RouterLink from '../components/RouterLink';
-import { SessionContext, clearSession } from '../helpers/session';
+import { SessionContext, clearSession } from '../services/session';
 import Slide from '@material-ui/core/Slide';
 
 const useStyles = makeStyles({

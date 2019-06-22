@@ -51,7 +51,7 @@ router.post('/change-password', isAuthenticated, async (req, res) => {
   });
   const { error: validationError, value: validatedRequestBody } = Joi.validate(req.body, requestSchema);
   if (validationError) {
-    return res.status(400).json({ details: validationError.details });
+    return res.status(400).json({ details: validationError.details[0].message });
   }
   try {
     const isMatching = await req.user.comparePassword(validatedRequestBody.oldPassword);

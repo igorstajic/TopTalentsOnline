@@ -4,14 +4,14 @@ import axios from '../configs/axios';
 
 const SESSION_KEY = 'access_token';
 
-type User = {
+export type UserType = {
   id: string,
   firstName: string,
   lastName: string,
   email: string,
 };
 
-export async function authenticateSession(email: string, password: string): Promise<{ user?: User, error?: string }> {
+export async function authenticateSession(email: string, password: string): Promise<{ user?: UserType, error?: string }> {
   try {
     const response = await axios.post('/auth/login', { email, password });
     const token = `Bearer ${response.data.token}`;
@@ -33,7 +33,7 @@ export function clearSession() {
   localStorage.removeItem(SESSION_KEY);
 }
 
-export async function getAuthenticatedUser(): Promise<?User> {
+export async function getAuthenticatedUser(): Promise<?UserType> {
   const token = localStorage.getItem(SESSION_KEY);
   axios.defaults.headers.common['Authorization'] = token;
   if (!token) {
@@ -52,7 +52,7 @@ export async function getAuthenticatedUser(): Promise<?User> {
   }
 }
 
-export const SessionContext = React.createContext<{ currentUser: User, setCurrentUser: ?User => void }>({
+export const SessionContext = React.createContext<{ currentUser: ?UserType, setCurrentUser: ?UserType => void }>({
   setCurrentUser: () => {},
   currentUser: null,
 });

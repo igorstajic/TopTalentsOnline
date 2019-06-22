@@ -14,7 +14,7 @@ import { withSnackbar } from 'notistack';
 
 import RouterLink from '../components/RouterLink';
 
-import { SessionContext, authenticateSession } from '../helpers/session';
+import { SessionContext, authenticateSession } from '../services/session';
 const useStyles = makeStyles(theme => ({
   '@global': {
     body: {
@@ -93,7 +93,7 @@ function Login({ enqueueSnackbar }: { enqueueSnackbar: Function }) {
 
   return (
     <Fade in={true}>
-      <Container component="main" maxWidth="xs">
+      <Container component="section" maxWidth="xs">
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />

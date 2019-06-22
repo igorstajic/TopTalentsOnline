@@ -1,5 +1,6 @@
 const db = require('../configs/db');
 const bcrypt = require('bcrypt');
+const _ = require('lodash');
 
 const userSchema = new db.Schema({
   firstName: 'string',
@@ -9,6 +10,8 @@ const userSchema = new db.Schema({
   country: 'string',
   password: 'string',
   type: 'string',
+  categories: 'array',
+  subCategories: 'array',
 });
 userSchema.path('email').index({ unique: true });
 
@@ -24,6 +27,12 @@ userSchema.pre('save', async function(next) {
 
 userSchema.methods.comparePassword = async function(candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
+};
+
+userSchema.methods.toClient = function() {
+  return _(this)
+    .pick(['id', 'email', 'firstName', 'lastName', 'city', 'country', 'categories', 'subCategories'])
+    .defaults({ categories: [], subCategories: [] });
 };
 const User = db.model('User', userSchema);
 

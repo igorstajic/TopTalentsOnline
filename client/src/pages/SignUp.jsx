@@ -15,7 +15,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 import RouterLink from '../components/RouterLink';
 import axios from '../configs/axios';
-import { SessionContext, authenticateSession } from '../helpers/session';
+import { SessionContext, authenticateSession } from '../services/session';
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -116,13 +116,12 @@ function SignUp({ history, enqueueSnackbar }: { history: Object, enqueueSnackbar
           email,
           password,
           firstName,
-          lastName
+          lastName,
         });
         const authenticationResponse = await authenticateSession(email, password);
         if (authenticationResponse.user) {
           session.setCurrentUser(authenticationResponse.user);
           history.push('/edit-profile');
-
         } else {
           enqueueSnackbar(authenticationResponse.error, { variant: 'error' });
         }
@@ -135,7 +134,7 @@ function SignUp({ history, enqueueSnackbar }: { history: Object, enqueueSnackbar
 
   return (
     <Fade in={true}>
-      <Container component="main" maxWidth="xs">
+      <Container component="section" maxWidth="xs">
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
@@ -147,7 +146,6 @@ function SignUp({ history, enqueueSnackbar }: { history: Object, enqueueSnackbar
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  autoComplete="fname"
                   name="firstName"
                   variant="outlined"
                   required
@@ -169,7 +167,6 @@ function SignUp({ history, enqueueSnackbar }: { history: Object, enqueueSnackbar
                   id="lastName"
                   label="Last Name"
                   name="lastName"
-                  autoComplete="lname"
                   error={lastNameErrorMessage.length > 0}
                   helperText={lastNameErrorMessage}
                   value={lastName}
@@ -210,10 +207,10 @@ function SignUp({ history, enqueueSnackbar }: { history: Object, enqueueSnackbar
                   variant="outlined"
                   required
                   fullWidth
-                  name="confirm_password"
+                  name="passwordConfirmation"
                   label="Confirm Password"
                   type="password"
-                  id="confirm_password"
+                  id="password_confirmation"
                   error={passwordConfirmationErrorMessage.length > 0}
                   helperText={passwordConfirmationErrorMessage}
                   value={passwordConfirmation}

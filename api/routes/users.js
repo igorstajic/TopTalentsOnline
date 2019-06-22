@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 
 const Joi = require('@hapi/joi');
-const _ = require('lodash');
 
 const User = require('../models/User');
 const isAuthenticated = require('../middleware/isAuthenticated');
@@ -20,12 +19,6 @@ router.post('/register', async (req, res) => {
     lastName: Joi.string()
       .trim()
       .required(),
-    // city: Joi.string()
-    //   .trim()
-    //   .required(),
-    // country: Joi.string()
-    //   .trim()
-    //   .required(),
   });
   const { error: validationError, value: validatedRequestBody } = Joi.validate(req.body, requestSchema);
   if (validationError) {
@@ -51,7 +44,9 @@ router.post('/register', async (req, res) => {
 router.get('/', async (req, res) => {
   try {
     const users = await User.find({ type: 'regular' });
-    res.json({ users: users.map(user => _.pick(user, ['id', 'email', 'firstName', 'lastName', 'city', 'country'])) });
+    res.json({
+      users: users.map(user => user.toClient()),
+    });
   } catch (error) {
     console.error(error); //eslint-disable-line
     res.status(500).json({ details: error });
@@ -63,7 +58,9 @@ router.get('/:id', async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     if (user) {
-      res.json({ user: _.pick(user, ['id', 'email', 'firstName', 'lastName', 'city', 'country']) });
+      res.json({
+        user: user.toClient(),
+      });
     } else {
       res.status(404).json({ details: `User ${req.params.id} is not found!` });
     }
@@ -76,6 +73,7 @@ router.get('/:id', async (req, res) => {
 // Update profile data by id.
 router.put('/:id', isAuthenticated, isAllowed, async (req, res) => {
   const requestSchema = Joi.object().keys({
+    id: Joi.string(),
     email: Joi.string().email({ minDomainSegments: 2 }),
     firstName: Joi.string()
       .trim()
@@ -83,19 +81,17 @@ router.put('/:id', isAuthenticated, isAllowed, async (req, res) => {
     lastName: Joi.string()
       .trim()
       .required(),
-    city: Joi.string()
-      .trim()
-      .required(),
-    country: Joi.string()
-      .trim()
-      .required(),
+    city: Joi.string().trim(),
+    country: Joi.string().trim(),
+    categories: Joi.array().items(Joi.string()),
+    subCategories: Joi.array().items(Joi.string()),
   });
   const { error: validationError, value: validatedRequestBody } = Joi.validate(req.body, requestSchema);
   if (validationError) {
     return res.status(400).json({ details: validationError.details[0].message });
   }
   try {
-    await User.findByIdAndUpdate(req.params.id, _.omit(validatedRequestBody, ['password']), { useFindAndModify: false });
+    await User.findByIdAndUpdate(req.params.id, validatedRequestBody, { useFindAndModify: false });
     res.json({ status: 'updated' });
   } catch (error) {
     console.error(error); //eslint-disable-line

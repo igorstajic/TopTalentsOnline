@@ -5,7 +5,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import { SnackbarProvider } from 'notistack';
 
-import { getAuthenticatedUser, SessionContext } from './helpers/session';
+import { getAuthenticatedUser, SessionContext } from './services/session';
 import TopBar from './layout/TopBar';
 import Loading from './layout/Loading';
 
@@ -13,7 +13,7 @@ import Public from './pages/Public';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import NotFound from './pages/NotFound';
-import EditProfile from './pages/EditProfile';
+import EditProfile from './pages/edit-profile/page';
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -55,7 +55,7 @@ function App() {
               <Route exact path="/" component={Public} />
               <Route path="/login" render={({ history }) => (currentUser ? <Redirect to="/" /> : <Login history={history} />)} />
               <Route path="/sign-up" render={({ history }) => (currentUser ? <Redirect to="/" /> : <SignUp history={history} />)} />
-              <Route path="/edit-profile" render={({ history }) => (!currentUser ? <Redirect to="/login" /> : <EditProfile history={history} />)} />
+              <Route path="/edit-profile" render={({ history }) => (!currentUser ? <Redirect to="/login" /> : <EditProfile history={history} profileId={currentUser.id} />)} />
 
               <Route component={NotFound} />
             </Switch>
