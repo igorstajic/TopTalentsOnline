@@ -61,15 +61,18 @@ function App() {
               <Route path="/sign-up" render={({ history }) => (currentUser ? <Redirect to="/" /> : <SignUp history={history} />)} />
               <Route
                 path="/edit-profile"
-                render={({ history }) =>
-                  !currentUser ? <Redirect to="/login" /> : <EditProfile history={history} uid={currentUser.id} />
-                }
+                render={({ history }) => (!currentUser ? <Redirect to="/login" /> : <EditProfile history={history} uid={currentUser.id} />)}
               />
               <Route
                 path="/inbox"
                 render={({ history }) => (!currentUser ? <Redirect to="/login" /> : <Inbox history={history} uid={currentUser.id} />)}
               />
-
+              {currentUser && currentUser.type === 'admin' && (
+                <Route path="/admin/edit-profile/:uid" render={({ history, match }) => <EditProfile history={history} uid={match.params.uid} />} />
+              )}
+              {currentUser && currentUser.type === 'admin' && (
+                <Route path="/admin/messages/:uid" render={({ history, match }) => <Inbox history={history} uid={match.params.uid} />} />
+              )}
               <Route component={NotFound} />
             </Switch>
           </main>

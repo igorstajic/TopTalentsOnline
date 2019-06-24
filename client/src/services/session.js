@@ -9,6 +9,7 @@ export type UserType = {
   firstName: string,
   lastName: string,
   email: string,
+  type: string,
 };
 
 export async function authenticateSession(email: string, password: string): Promise<{ user?: UserType, error?: string }> {

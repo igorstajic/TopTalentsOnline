@@ -64,22 +64,24 @@ export default function TopBar() {
               Login
             </Button>
           )}
-          <Menu
-            anchorEl={menuAnchor}
-            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            keepMounted
-            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-            open={Boolean(menuAnchor)}
-            onClose={handleMenuClose}
-          >
-            <MenuItem component={RouterLink} to={`/profile/${session.currentUser.id}`} onClick={handleMenuClose}>
-              My Profile
-            </MenuItem>
-            <MenuItem component={RouterLink} to="/edit-profile" onClick={handleMenuClose}>
-              Edit Profile
-            </MenuItem>
-            <MenuItem onClick={handleLogout}>Logout</MenuItem>
-          </Menu>
+          {session.currentUser && (
+            <Menu
+              anchorEl={menuAnchor}
+              anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+              keepMounted
+              transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+              open={Boolean(menuAnchor)}
+              onClose={handleMenuClose}
+            >
+              <MenuItem component={RouterLink} to={`/profile/${session.currentUser.id}`} onClick={handleMenuClose}>
+                My Profile
+              </MenuItem>
+              <MenuItem component={RouterLink} to="/edit-profile" onClick={handleMenuClose}>
+                Edit Profile
+              </MenuItem>
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            </Menu>
+          )}
         </Toolbar>
       </AppBar>
     </Slide>

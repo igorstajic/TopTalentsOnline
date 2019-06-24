@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
@@ -17,6 +17,7 @@ import IconButton from '@material-ui/core/IconButton';
 
 import RouterLink from '../../components/RouterLink';
 import ContactForm from '../../components/ContactForm';
+import { SessionContext } from '../../services/session';
 
 const useStyles = makeStyles(theme => ({
   cardList: {
@@ -49,6 +50,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function CardList({ profiles }) {
+  const session = useContext(SessionContext);
+
   const classes = useStyles();
   const [isShowingContactForm, showContactForm] = useState(false);
   const [selectedProfile, setSelectedProfile] = useState({});
@@ -87,8 +90,18 @@ export default function CardList({ profiles }) {
                     showContactForm(true);
                   }}
                 >
-                  contact
+                  Contact
                 </Button>
+                {session.currentUser && session.currentUser.type === 'admin' && (
+                  <Button color="secondary" size="small" component={RouterLink} to={`/admin/edit-profile/${profile.id}`}>
+                    Edit
+                  </Button>
+                )}
+                {session.currentUser && session.currentUser.type === 'admin' && (
+                  <Button color="secondary" size="small" component={RouterLink} to={`/admin/messages/${profile.id}`}>
+                    Messages
+                  </Button>
+                )}
               </CardActions>
             </Card>
           </Zoom>

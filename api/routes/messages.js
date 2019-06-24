@@ -38,7 +38,7 @@ router.post('/send', async (req, res) => {
 
     const message = new Message({ ...validatedRequestBody, timestamp: moment().valueOf() });
     message.save();
-    res.json({ status: 'sent' });
+    res.json({ status: 'sent', id: message.id });
   } catch (error) {
     logger.error(error);
     res.status(500).json({ details: error });
@@ -64,7 +64,7 @@ router.delete('/:id', isAuthenticated, async (req, res) => {
       return res.status(404).json({ details: 'Message not found!' });
     }
 
-    if (String(message.uid) !== String(req.user.id)) {
+    if (String(message.uid) !== String(req.user.id) && req.user.type !== 'admin') {
       return res.status(405).json({ details: 'Not allowed!' });
     }
     await Message.findByIdAndRemove(req.params.id, { useFindAndModify: false });

@@ -57,6 +57,19 @@ function PublicUserProfile({ match, enqueueSnackbar }) {
     }
     getProfileData();
   }, [enqueueSnackbar, match.params.uid]);
+
+  const makeLocationString = (city = '', country = '') => {
+    if (city.length && country.length) {
+      return `${city}, ${country}`;
+    }
+    if (city.length) {
+      return `${city}`;
+    }
+    if (country.length) {
+      return `${country}`;
+    }
+    return '';
+  };
   return (
     <Container maxWidth="md" component="section">
       {isLoading ? (
@@ -67,12 +80,12 @@ function PublicUserProfile({ match, enqueueSnackbar }) {
             {`${profile.firstName} ${profile.lastName}`}
           </Typography>
           <Typography className={classes.category} component="h2" variant="subtitle1">
-            {`${profile.category}`}
+            {profile.category}
           </Typography>
 
           <Box mt={4} mb={4}>
             <Typography className={classes.label} component="p" variant="body1">
-              <LocationIcon color="action" /> {`${profile.city}, ${profile.country}`}
+              {(profile.city || profile.country) && <LocationIcon color="action" />} {makeLocationString(profile.city, profile.country)}
             </Typography>
           </Box>
 

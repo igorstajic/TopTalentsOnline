@@ -30,7 +30,7 @@ router.post('/login', async function(req, res) {
     const isMatching = await user.comparePassword(data.password);
     if (isMatching) {
       let token = jwt.sign({ uid: user.id }, config.keys.tokenKey, { expiresIn: config.keys.tokenExpiresIn });
-      res.json({ user: _.pick(user, ['email', 'firstName', 'lastName', 'id']), token });
+      res.json({ user: _.pick(user, ['email', 'firstName', 'lastName', 'id', 'type']), token });
     } else {
       res.status(401).json({ details: 'Invalid username and password combination!' });
     }
@@ -70,7 +70,7 @@ router.post('/change-password', isAuthenticated, async (req, res) => {
 });
 
 router.get('/check-user-token', isAuthenticated, (req, res) =>
-  res.json({ user: _.pick(req.user, ['id', 'email', 'firstName', 'lastName']) })
+  res.json({ user: _.pick(req.user, ['id', 'email', 'firstName', 'lastName', 'type']) })
 );
 
 module.exports = router;
