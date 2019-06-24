@@ -10,7 +10,7 @@ const userSchema = new db.Schema({
   country: 'string',
   password: 'string',
   type: 'string',
-  categories: [{ type: String, lowercase: true, trim: true }],
+  category: 'string',
   subCategories: [{ type: String, lowercase: true, trim: true }],
 });
 userSchema.path('email').index({ unique: true });
@@ -31,8 +31,8 @@ userSchema.methods.comparePassword = async function(candidatePassword) {
 
 userSchema.methods.toClient = function() {
   return _(this)
-    .pick(['id', 'email', 'firstName', 'lastName', 'city', 'country', 'categories', 'subCategories'])
-    .defaults({ categories: [], subCategories: [] });
+    .pick(['id', 'email', 'firstName', 'lastName', 'city', 'country', 'category', 'subCategories'])
+    .defaults({ subCategories: [] });
 };
 const User = db.model('User', userSchema);
 

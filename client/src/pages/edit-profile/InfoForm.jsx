@@ -65,7 +65,7 @@ type StateType = {
     email: string,
     city: string,
     country: string,
-    categories: Array<string>,
+    category: string,
     subCategories: Array<string>,
   },
   inputErrors: {
@@ -84,7 +84,7 @@ const initialState: StateType = {
     email: '',
     city: '',
     country: '',
-    categories: [],
+    category: '',
     subCategories: [],
   },
   inputErrors: {
@@ -234,14 +234,14 @@ function InfoForm({ enqueueSnackbar, profileData }: { profileData: Object, enque
           <Grid item xs={12}>
             <SelectControl
               options={categories}
-              label="Categories"
-              placeholder="Add..."
-              value={state.profile.categories}
-              onSelect={selected =>
+              label="Category"
+              placeholder="Choose..."
+              value={state.profile.category}
+              onSelect={selected => 
                 dispatch({
                   type: actions.UPDATE_PROFILE,
                   payload: {
-                    categories: selected,
+                    category: selected,
                   },
                 })
               }
@@ -251,6 +251,7 @@ function InfoForm({ enqueueSnackbar, profileData }: { profileData: Object, enque
             <SelectControl
               options={subCategories}
               label="Skills"
+              isMulty
               placeholder="Add..."
               value={state.profile.subCategories}
               onSelect={selected =>

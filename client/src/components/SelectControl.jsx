@@ -1,7 +1,9 @@
 //@flow
 import React from 'react';
 import clsx from 'clsx';
-import Select from 'react-select/creatable';
+import Select from 'react-select';
+import Creatable from 'react-select/creatable';
+
 import { emphasize, makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import NoSsr from '@material-ui/core/NoSsr';
@@ -23,6 +25,7 @@ const useStyles = makeStyles(theme => ({
     flex: 1,
     alignItems: 'center',
     overflow: 'hidden',
+    textTransform: 'capitalize',
   },
   chip: {
     margin: theme.spacing(0.5, 0.25),
@@ -166,14 +169,16 @@ type SelectedValue = string | Array<string>;
 function IntegrationReactSelect({
   placeholder,
   label,
-  isSingle,
+  isMulty,
   options,
   value,
   onSelect,
+  isCreatable,
 }: {
   placeholder: string,
   label: string,
-  isSingle?: boolean,
+  isMulty?: boolean,
+  isCreatable?: boolean,
   options: Array<string>,
   value: SelectedValue,
   onSelect: SelectedValue => void,
@@ -192,30 +197,10 @@ function IntegrationReactSelect({
       cursor: 'pointer',
     }),
   };
-
+  const Control = isCreatable ? Creatable : Select;
   return (
     <NoSsr>
-      {isSingle ? (
-        <Select
-          classes={classes}
-          styles={selectStyles}
-          inputId="react-select-single"
-          TextFieldProps={{
-            label,
-            InputLabelProps: {
-              htmlFor: 'react-select-single',
-              shrink: true,
-            },
-          }}
-          options={options.map(item => ({
-            value: item,
-            label: item,
-          }))}
-          components={components}
-          value={value}
-          onChange={onSelect}
-        />
-      ) : (
+      {isMulty ? (
         <Select
           classes={classes}
           styles={selectStyles}
@@ -244,6 +229,27 @@ function IntegrationReactSelect({
           }
           onChange={selected => onSelect(selected ? selected.map(i => i.label) : [])}
           isMulti
+        />
+      ) : (
+        <Select
+          placeholder={placeholder}
+          classes={classes}
+          styles={selectStyles}
+          inputId="react-select-single"
+          TextFieldProps={{
+            label,
+            InputLabelProps: {
+              htmlFor: 'react-select-single',
+              shrink: true,
+            },
+          }}
+          options={options.map(item => ({
+            value: item,
+            label: item,
+          }))}
+          components={components}
+          value={{ value, label: value }}
+          onChange={selected => onSelect(selected.value)}
         />
       )}
     </NoSsr>
