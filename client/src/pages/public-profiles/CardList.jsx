@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
@@ -14,6 +14,9 @@ import LocationIcon from '@material-ui/icons/LocationOn';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
+
+import RouterLink from '../../components/RouterLink';
+import ContactForm from '../../components/ContactForm';
 
 const useStyles = makeStyles(theme => ({
   cardList: {
@@ -38,7 +41,7 @@ const useStyles = makeStyles(theme => ({
   chip: {
     margin: theme.spacing(0.25),
   },
-  labelContainer: {
+  location: {
     display: 'flex',
     alignItems: 'center',
     marginBottom: theme.spacing(2),
@@ -47,6 +50,8 @@ const useStyles = makeStyles(theme => ({
 
 export default function CardList({ profiles }) {
   const classes = useStyles();
+  const [isShowingContactForm, showContactForm] = useState(false);
+  const [selectedProfile, setSelectedProfile] = useState({});
 
   return (
     <Grid className={classes.cardList} container item spacing={2}>
@@ -56,7 +61,7 @@ export default function CardList({ profiles }) {
             <Card className={classes.card}>
               <CardHeader
                 action={
-                  <IconButton aria-label="Settings">
+                  <IconButton component={RouterLink} to={`/profile/${profile.id}`} aria-label="Settings">
                     <InfoIcon />
                   </IconButton>
                 }
@@ -64,7 +69,7 @@ export default function CardList({ profiles }) {
                 subheader={<span className={classes.cardHeader__subtitle}>{`${profile.category}`}</span>}
               />
               <CardContent className={classes.card__content}>
-                <Typography className={classes.labelContainer} component="p" variant="body1">
+                <Typography className={classes.location} component="p" variant="body1">
                   <LocationIcon color="action" /> {`${profile.city}, ${profile.country}`}
                 </Typography>
 
@@ -74,7 +79,14 @@ export default function CardList({ profiles }) {
                 ))}
               </CardContent>
               <CardActions>
-                <Button color="primary" size="small">
+                <Button
+                  color="primary"
+                  size="small"
+                  onClick={() => {
+                    setSelectedProfile(profile);
+                    showContactForm(true);
+                  }}
+                >
                   contact
                 </Button>
               </CardActions>
@@ -82,6 +94,7 @@ export default function CardList({ profiles }) {
           </Zoom>
         </Grid>
       ))}
+      <ContactForm uid={selectedProfile.id} isOpen={isShowingContactForm} handleClose={() => showContactForm(false)} />
     </Grid>
   );
 }

@@ -11,8 +11,8 @@ import LoadingIndicator from '../../layout/LoadingIndicator';
 import Filters from './Filters';
 import List from './CardList';
 
-function Public({ enqueueSnackbar }) {
-  const [isLoading, setIsLoading] = useState(false);
+function PublicProfiles({ enqueueSnackbar }) {
+  const [isLoading, setIsLoading] = useState(true);
   const [allProfiles, setAllProfiles] = useState([]);
   const [filteredProfiles, setFilteredProfiles] = useState([]);
 
@@ -47,4 +47,4 @@ function Public({ enqueueSnackbar }) {
   );
 }
 
-export default withSnackbar(Public);
+export default withSnackbar(PublicProfiles);

@@ -13,9 +13,9 @@ import { withSnackbar } from 'notistack';
 
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
-import RouterLink from '../components/RouterLink';
-import axios from '../configs/axios';
-import { SessionContext, authenticateSession } from '../services/session';
+import RouterLink from '../../components/RouterLink';
+import axios from '../../configs/axios';
+import { SessionContext, authenticateSession } from '../../services/session';
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -64,6 +64,8 @@ function SignUp({ history, enqueueSnackbar }: { history: Object, enqueueSnackbar
 
   const validateInputs = useCallback(() => {
     let isValid = false;
+    const emailValidatior = /\S+@\S+\.\S+/;
+
     if (firstName.trim().length === 0) {
       setFirstNameErrorMessage('First name is required');
     } else {
@@ -78,6 +80,8 @@ function SignUp({ history, enqueueSnackbar }: { history: Object, enqueueSnackbar
     }
     if (email.trim().length === 0) {
       setEmailErrorMessage('Email is required');
+    } else if (!emailValidatior.test(email)) {
+      setEmailErrorMessage('Email is invalid');
     } else {
       setEmailErrorMessage('');
       isValid = true;

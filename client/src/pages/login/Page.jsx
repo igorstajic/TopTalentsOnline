@@ -12,9 +12,9 @@ import Container from '@material-ui/core/Container';
 import Fade from '@material-ui/core/Fade';
 import { withSnackbar } from 'notistack';
 
-import RouterLink from '../components/RouterLink';
+import RouterLink from '../../components/RouterLink';
 
-import { SessionContext, authenticateSession } from '../services/session';
+import { SessionContext, authenticateSession } from '../../services/session';
 const useStyles = makeStyles(theme => ({
   '@global': {
     body: {

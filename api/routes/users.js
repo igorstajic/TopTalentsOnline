@@ -64,7 +64,7 @@ router.get('/:id', async (req, res) => {
     }
   } catch (error) {
     logger.error(error);
-    res.status(500).json({ details: error });
+    res.status(500).json({ details: error.message || error });
   }
 });
 

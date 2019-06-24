@@ -10,10 +10,11 @@ import TopBar from './layout/TopBar';
 import LoadingIndicator from './layout/LoadingIndicator';
 
 import Profiles from './pages/public-profiles/page';
-import Login from './pages/Login';
-import SignUp from './pages/SignUp';
+import Login from './pages/login/Page';
+import SignUp from './pages/sign-up/Page';
 import NotFound from './pages/NotFound';
 import EditProfile from './pages/edit-profile/Page';
+import UserProfile from './pages/public-user-profile/Page';
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -53,6 +54,8 @@ function App() {
           <main>
             <Switch>
               <Route exact path="/" component={Profiles} />
+              <Route path="/profile/:uid" component={UserProfile} />
+
               <Route path="/login" render={({ history }) => (currentUser ? <Redirect to="/" /> : <Login history={history} />)} />
               <Route path="/sign-up" render={({ history }) => (currentUser ? <Redirect to="/" /> : <SignUp history={history} />)} />
               <Route
