@@ -12,7 +12,7 @@ const useStyles = makeStyles({
     textAlign: 'center',
   },
 });
-export default function Loading() {
+export default function LoadingIndicator() {
   const classes = useStyles();
 
   return (

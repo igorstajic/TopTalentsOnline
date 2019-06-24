@@ -197,11 +197,11 @@ function IntegrationReactSelect({
       cursor: 'pointer',
     }),
   };
-  const Control = isCreatable ? Creatable : Select;
+  const SelectControl = isCreatable ? Creatable : Select;
   return (
     <NoSsr>
       {isMulty ? (
-        <Select
+        <SelectControl
           classes={classes}
           styles={selectStyles}
           inputId="react-select-multiple"
@@ -231,7 +231,7 @@ function IntegrationReactSelect({
           isMulti
         />
       ) : (
-        <Select
+        <SelectControl
           placeholder={placeholder}
           classes={classes}
           styles={selectStyles}

@@ -234,6 +234,7 @@ function InfoForm({ enqueueSnackbar, profileData }: { profileData: Object, enque
           <Grid item xs={12}>
             <SelectControl
               options={categories}
+              isCreatable
               label="Category"
               placeholder="Choose..."
               value={state.profile.category}
@@ -250,6 +251,7 @@ function InfoForm({ enqueueSnackbar, profileData }: { profileData: Object, enque
           <Grid item xs={12}>
             <SelectControl
               options={subCategories}
+              isCreatable
               label="Skills"
               isMulty
               placeholder="Add..."

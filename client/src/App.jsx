@@ -7,13 +7,13 @@ import { SnackbarProvider } from 'notistack';
 
 import { getAuthenticatedUser, SessionContext } from './services/session';
 import TopBar from './layout/TopBar';
-import Loading from './layout/Loading';
+import LoadingIndicator from './layout/LoadingIndicator';
 
-import Public from './pages/Public';
+import Profiles from './pages/public-profiles/page';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import NotFound from './pages/NotFound';
-import EditProfile from './pages/edit-profile/page';
+import EditProfile from './pages/edit-profile/Page';
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -28,7 +28,7 @@ function App() {
     getUser();
   }, []);
   if (isLoading) {
-    return <Loading />;
+    return <LoadingIndicator />;
   }
 
   return (
@@ -52,10 +52,15 @@ function App() {
           <TopBar />
           <main>
             <Switch>
-              <Route exact path="/" component={Public} />
+              <Route exact path="/" component={Profiles} />
               <Route path="/login" render={({ history }) => (currentUser ? <Redirect to="/" /> : <Login history={history} />)} />
               <Route path="/sign-up" render={({ history }) => (currentUser ? <Redirect to="/" /> : <SignUp history={history} />)} />
-              <Route path="/edit-profile" render={({ history }) => (!currentUser ? <Redirect to="/login" /> : <EditProfile history={history} profileId={currentUser.id} />)} />
+              <Route
+                path="/edit-profile"
+                render={({ history }) =>
+                  !currentUser ? <Redirect to="/login" /> : <EditProfile history={history} profileId={currentUser.id} />
+                }
+              />
 
               <Route component={NotFound} />
             </Switch>
