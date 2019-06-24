@@ -3,6 +3,11 @@ module.exports = () => ({
     name: process.env.APP_NAME,
     port: process.env.APP_PORT || 8000,
   },
+  mailserver: {
+    host: process.env.EMAIL_SERVER_HOST,
+    username: process.env.EMAIL_SERVER_USERNAME,
+    password: process.env.EMAIL_SERVER_PASSWORD,
+  },
   mongo: {
     port: process.env.DB_PORT,
     host: process.env.DB_HOST,
@@ -12,9 +17,9 @@ module.exports = () => ({
   },
   keys: {
     tokenKey: process.env.TOKEN_KEY,
-    tokenExpiresIn: process.env.TOKEN_EXPIRES_IN
+    tokenExpiresIn: process.env.TOKEN_EXPIRES_IN,
   },
   logs: {
-    level: process.env.LOG_LEVEL
-  }
+    level: process.env.LOG_LEVEL,
+  },
 });

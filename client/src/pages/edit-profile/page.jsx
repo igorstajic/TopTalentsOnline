@@ -39,7 +39,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function EditProfile({ profileId, enqueueSnackbar }: { profileId: string, enqueueSnackbar: Function }) {
+function EditProfile({ uid, enqueueSnackbar }: { uid: string, enqueueSnackbar: Function }) {
   const classes = useStyles();
 
   const [activeTab, setActiveTab] = useState(0);
@@ -49,7 +49,7 @@ function EditProfile({ profileId, enqueueSnackbar }: { profileId: string, enqueu
   useEffect(() => {
     async function getProfileData() {
       try {
-        const getProfileResponse = await axios.get(`/users/${profileId}`);
+        const getProfileResponse = await axios.get(`/users/${uid}`);
         setProfileData(getProfileResponse.data.user);
         setIsLoading(false);
       } catch (error) {
@@ -57,7 +57,7 @@ function EditProfile({ profileId, enqueueSnackbar }: { profileId: string, enqueu
       }
     }
     getProfileData();
-  }, [enqueueSnackbar, profileId]);
+  }, [enqueueSnackbar, uid]);
   return (
     <>
       {isLoading && (

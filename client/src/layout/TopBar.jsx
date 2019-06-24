@@ -5,12 +5,15 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
+
 import Menu from '@material-ui/core/Menu';
 import RouterLink from '../components/RouterLink';
 import { SessionContext, clearSession } from '../services/session';
 import Slide from '@material-ui/core/Slide';
+
+import MailIcon from '@material-ui/icons/Mail';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 
 const useStyles = makeStyles({
   title: {
@@ -41,6 +44,11 @@ export default function TopBar() {
           <Typography color="inherit" component={RouterLink} to="/" variant="h6" className={classes.title}>
             TopTalents Online
           </Typography>
+          {session.currentUser && (
+            <IconButton color="inherit" component={RouterLink} to="/inbox">
+              <MailIcon />
+            </IconButton>
+          )}
           {session.currentUser ? (
             <IconButton
               onClick={ev => setMenuAnchor(ev.currentTarget)}
@@ -64,7 +72,7 @@ export default function TopBar() {
             open={Boolean(menuAnchor)}
             onClose={handleMenuClose}
           >
-            <MenuItem component={RouterLink} to="/profile" onClick={handleMenuClose}>
+            <MenuItem component={RouterLink} to={`/profile/${session.currentUser.id}`} onClick={handleMenuClose}>
               My Profile
             </MenuItem>
             <MenuItem component={RouterLink} to="/edit-profile" onClick={handleMenuClose}>

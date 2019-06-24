@@ -1,19 +1,19 @@
 const nodemailer = require('nodemailer');
-
-// Using https://ethereal.email
-const HOSTNAME = 'smtp.ethereal.email';
-const USERNAME = 'abbie47@ethereal.email';
-const PASSWORD = 'cyVc2nUzTp6KajP95W';
+const config = require('./configs')();
 
 async function sendEmail({ from, to, subject, text, html }) {
   try {
+    let testAccount = await nodemailer.createTestAccount();
+    const HOSTNAME = config.mailserver.host || 'smtp.ethereal.email';
+
+    // Using https://ethereal.email by default
     let transporter = nodemailer.createTransport({
       host: HOSTNAME,
       port: 587,
       secure: false, // true for 465, false for other ports
       auth: {
-        user: USERNAME,
-        pass: PASSWORD,
+        user: config.mailserver.username || testAccount.user,
+        pass: config.mailserver.password || testAccount.pass,
       },
     });
 
@@ -24,8 +24,11 @@ async function sendEmail({ from, to, subject, text, html }) {
       text,
       html,
     });
-    const { message_id } = info.response.match(/MSGID=(?<message_id>.*)./).groups;
-    logger.info(`Message sent! Preview URL https://ethereal.email/message/${message_id}`);
+    if (HOSTNAME === 'smtp.ethereal.email') {
+      logger.info(`Message sent! Preview URL ${nodemailer.getTestMessageUrl(info)}`);
+    } else {
+      logger.info(`Message sent!`);
+    }
   } catch (error) {
     logger.error(error);
   }

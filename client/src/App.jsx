@@ -15,6 +15,7 @@ import SignUp from './pages/sign-up/Page';
 import NotFound from './pages/NotFound';
 import EditProfile from './pages/edit-profile/Page';
 import UserProfile from './pages/public-user-profile/Page';
+import Inbox from './pages/inbox/Page';
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -61,8 +62,12 @@ function App() {
               <Route
                 path="/edit-profile"
                 render={({ history }) =>
-                  !currentUser ? <Redirect to="/login" /> : <EditProfile history={history} profileId={currentUser.id} />
+                  !currentUser ? <Redirect to="/login" /> : <EditProfile history={history} uid={currentUser.id} />
                 }
+              />
+              <Route
+                path="/inbox"
+                render={({ history }) => (!currentUser ? <Redirect to="/login" /> : <Inbox history={history} uid={currentUser.id} />)}
               />
 
               <Route component={NotFound} />

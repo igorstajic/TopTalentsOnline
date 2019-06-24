@@ -4,6 +4,7 @@ const isAuthenticated = require('../middleware/isAuthenticated');
 const isAllowed = require('../middleware/isAllowed');
 
 const Joi = require('@hapi/joi');
+const moment = require('moment');
 
 const Message = require('../models/Message');
 const User = require('../models/User');
@@ -35,7 +36,7 @@ router.post('/send', async (req, res) => {
       text: validatedRequestBody.message,
     });
 
-    const message = new Message(validatedRequestBody);
+    const message = new Message({ ...validatedRequestBody, timestamp: moment().valueOf() });
     message.save();
     res.json({ status: 'sent' });
   } catch (error) {
@@ -48,7 +49,28 @@ router.get('/for-user/:id', isAuthenticated, isAllowed, async (req, res) => {
   try {
     const messages = await Message.find({ uid: req.params.id });
     res.json({
-      messages,
+      messages: messages.map(m => m.toClient()),
+    });
+  } catch (error) {
+    logger.error(error);
+    res.status(500).json({ details: error });
+  }
+});
+
+router.delete('/:id', isAuthenticated, async (req, res) => {
+  try {
+    const message = await Message.findById(req.params.id);
+    if (!message) {
+      return res.status(404).json({ details: 'Message not found!' });
+    }
+
+    if (String(message.uid) !== String(req.user.id)) {
+      return res.status(405).json({ details: 'Not allowed!' });
+    }
+    await Message.findByIdAndRemove(req.params.id, { useFindAndModify: false });
+
+    res.json({
+      status: 'deleted',
     });
   } catch (error) {
     logger.error(error);
