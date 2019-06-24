@@ -19,6 +19,7 @@ const morgan = require('morgan');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const authRouter = require('./routes/auth');
+const messagesRouter = require('./routes/messages');
 
 const app = express();
 const cors = require('cors');
@@ -34,6 +35,7 @@ app.use(express.json());
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);
+app.use('/messages', messagesRouter);
 
 app.use(function(req, res) {
   res.status(404).json({ details: 'Not Found!' });

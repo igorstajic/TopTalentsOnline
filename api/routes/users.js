@@ -3,9 +3,9 @@ const router = express.Router();
 
 const Joi = require('@hapi/joi');
 
-const User = require('../models/User');
 const isAuthenticated = require('../middleware/isAuthenticated');
 const isAllowed = require('../middleware/isAllowed');
+const User = require('../models/User');
 
 router.post('/register', async (req, res) => {
   const requestSchema = Joi.object().keys({
@@ -40,7 +40,6 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// Get all profiles.
 router.get('/', async (req, res) => {
   try {
     const users = await User.find({ type: 'regular' });
@@ -53,7 +52,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Get profile by id.
 router.get('/:id', async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
@@ -70,7 +68,6 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Update profile data by id.
 router.put('/:id', isAuthenticated, isAllowed, async (req, res) => {
   const requestSchema = Joi.object().keys({
     id: Joi.string(),
@@ -99,7 +96,6 @@ router.put('/:id', isAuthenticated, isAllowed, async (req, res) => {
   }
 });
 
-// Remove profile by id.
 router.delete('/:id', isAuthenticated, isAllowed, async (req, res) => {
   try {
     await User.findByIdAndRemove(req.params.id, { useFindAndModify: false });
