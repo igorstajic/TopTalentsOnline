@@ -9,7 +9,7 @@ import { getAuthenticatedUser, SessionContext } from './services/session';
 import TopBar from './layout/TopBar';
 import LoadingIndicator from './layout/LoadingIndicator';
 
-import Profiles from './pages/public-profiles/page';
+import Profiles from './pages/public-profiles/Page';
 import Login from './pages/login/Page';
 import SignUp from './pages/sign-up/Page';
 import NotFound from './pages/NotFound';

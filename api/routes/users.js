@@ -7,6 +7,7 @@ const isAuthenticated = require('../middleware/isAuthenticated');
 const isAllowed = require('../middleware/isAllowed');
 const User = require('../models/User');
 
+//POST /users/register
 router.post('/register', async (req, res) => {
   const requestSchema = Joi.object().keys({
     password: Joi.string()
@@ -40,11 +41,65 @@ router.post('/register', async (req, res) => {
   }
 });
 
+//GET /users
 router.get('/', async (req, res) => {
   try {
-    const users = await User.find({ type: 'regular' });
+    const querySchema = Joi.object().keys({
+      filter: Joi.string()
+        .allow('')
+        .default(''),
+      categories: Joi.string()
+        .allow('')
+        .default(''),
+      subCategories: Joi.string()
+        .allow('')
+        .default(''),
+      limit: Joi.number()
+        .integer()
+        .min(1)
+        .default(10),
+      page: Joi.number()
+        .integer()
+        .min(1)
+        .default(1),
+    });
+    const { error: validationError, value: requestQuery } = Joi.validate(req.query, querySchema);
+    if (validationError) {
+      return res.status(400).json({ details: validationError.details[0].message });
+    }
+    const filters = [
+      { firstName: new RegExp(requestQuery.filter, 'gi') },
+      { lastName: new RegExp(requestQuery.filter, 'gi') },
+      { city: new RegExp(requestQuery.filter, 'gi') },
+      { country: new RegExp(requestQuery.filter, 'gi') },
+    ];
+
+    const categoryFilters = {};
+    if (requestQuery.categories) {
+      categoryFilters.category = { $in: requestQuery.categories.split(',') };
+    }
+    if (requestQuery.subCategories) {
+      categoryFilters.subCategories = { $all: requestQuery.subCategories.split(',') };
+    }
+    if (requestQuery.filter && requestQuery.filter.split(' ').length) {
+      filters.push({
+        $and: [
+          { firstName: new RegExp(requestQuery.filter.split(' ')[0], 'gi') },
+          { lastName: new RegExp(requestQuery.filter.split(' ')[1], 'gi') },
+        ],
+      });
+    }
+    const usersQuery = User.where({ type: 'regular' })
+      .and(categoryFilters)
+      .or(filters);
+    const count = await usersQuery.countDocuments();
+    const users = await usersQuery
+      .find()
+      .skip(requestQuery.limit * (requestQuery.page - 1))
+      .limit(requestQuery.limit);
     res.json({
       users: users.map(user => user.toClient()),
+      hasMore: count - users.length - (requestQuery.page - 1) * requestQuery.limit > 0,
     });
   } catch (error) {
     logger.error(error);
@@ -52,6 +107,7 @@ router.get('/', async (req, res) => {
   }
 });
 
+//GET /users/:id
 router.get('/:id', async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
@@ -68,6 +124,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+//PUT /users/:id
 router.put('/:id', isAuthenticated, isAllowed, async (req, res) => {
   const requestSchema = Joi.object().keys({
     id: Joi.string(),
@@ -96,6 +153,7 @@ router.put('/:id', isAuthenticated, isAllowed, async (req, res) => {
   }
 });
 
+//DELETE /users/:id
 router.delete('/:id', isAuthenticated, isAllowed, async (req, res) => {
   try {
     await User.findByIdAndRemove(req.params.id, { useFindAndModify: false });

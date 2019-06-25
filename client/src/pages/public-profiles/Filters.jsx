@@ -2,14 +2,21 @@ import React, { useState, useEffect } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
-import TextField from '@material-ui/core/TextField';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
+import IconClose from '@material-ui/icons/Close';
+import FormControl from '@material-ui/core/FormControl';
+
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
-import intersection from 'lodash/intersection';
 
 import SelectControl from '../../components/SelectControl';
-import categories from '../../data/categories';
-import subCategories from '../../data/subcategories';
+import defaultCategories from '../../data/categories';
+import defaultSubCategories from '../../data/subcategories';
+import axios from '../../configs/axios';
+import union from 'loadsh/union';
 
 const useStyles = makeStyles(theme => ({
   filters: {
@@ -18,49 +25,83 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(4),
     padding: theme.spacing(1),
   },
+  text: {
+    width: '100%',
+  },
 }));
 
-export default function Filters({ allProfiles = [], setFilteredProfiles }) {
+function useDebounce(value, delay) {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [delay, value]);
+
+  return debouncedValue;
+}
+
+export default function Filters({ setFilters }) {
   const classes = useStyles();
 
-  const [searchText, setSearchText] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
   const [searchCategories, setSearchCategories] = useState([]);
   const [searchSubCategories, setSearchSubCategories] = useState([]);
 
+  const [allCategories, setAllCategories] = useState(defaultCategories);
+  const [allSubCategories, setAllSubCategories] = useState(defaultSubCategories);
+
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
+
   useEffect(() => {
-    const filteredProfiles = allProfiles.filter(profile => {
-      const matchesSearchStirng =
-        searchText.trim().length === 0 ||
-        `${profile.firstName} ${profile.lastName} ${profile.city} ${profile.country}`.toLowerCase().includes(searchText.toLowerCase());
+    const getAdditionalFilters = async () => {
+      try {
+        const getFiltersResponse = await axios.get('/filters/all');
+        setAllCategories(union(getFiltersResponse.data.categories, defaultCategories));
+        setAllSubCategories(union(getFiltersResponse.data.subCategories, defaultSubCategories));
+      } catch (error) {}
+    };
+    getAdditionalFilters();
+  }, []);
 
-      const matchesCategoryFilter = searchCategories.length === 0 || searchCategories.includes(profile.category);
-
-      const matchesSubCategoryFilter = searchSubCategories.length === 0 || intersection(searchSubCategories, profile.subCategories).length;
-
-      return matchesSearchStirng && matchesCategoryFilter && matchesSubCategoryFilter;
-    });
-    setFilteredProfiles(filteredProfiles);
-  }, [allProfiles, searchCategories, searchSubCategories, searchText, setFilteredProfiles]);
+  useEffect(() => {
+    setFilters({ searchTerm: debouncedSearchTerm, categories: searchCategories, subCategories: searchSubCategories });
+  }, [debouncedSearchTerm, searchCategories, searchSubCategories, setFilters]);
   return (
     <Paper className={classes.filters}>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
           <Box display={'flex'} p={1} alignItems={'flex-end'} height={'100%'}>
-            <TextField
-              id="searchText"
-              label="Search"
-              placeholder="Type to search..."
-              name="searchText"
-              fullWidth
-              value={searchText}
-              onChange={ev => setSearchText(ev.target.value)}
-            />
+            <FormControl className={classes.text}>
+              <InputLabel htmlFor="search-text">Search</InputLabel>
+              <Input
+                id="search-text"
+                placeholder="Type to search..."
+                type={'text'}
+                value={searchTerm}
+                onChange={ev => setSearchTerm(ev.target.value)}
+                endAdornment={
+                  searchTerm.length > 0 && (
+                    <InputAdornment position="end">
+                      <IconButton aria-label="Toggle password visibility" onClick={() => setSearchTerm('')}>
+                        <IconClose />
+                      </IconButton>
+                    </InputAdornment>
+                  )
+                }
+              />
+            </FormControl>
           </Box>
         </Grid>
         <Grid item xs={12} sm={6}>
           <Box p={1}>
             <SelectControl
-              options={categories}
+              options={allCategories}
               label="Categories"
               isMulty
               placeholder="Filter..."
@@ -71,7 +112,7 @@ export default function Filters({ allProfiles = [], setFilteredProfiles }) {
 
           <Box p={1}>
             <SelectControl
-              options={subCategories}
+              options={allSubCategories}
               label="Skills"
               isMulty
               placeholder="Add..."
