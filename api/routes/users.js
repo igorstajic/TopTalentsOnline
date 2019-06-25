@@ -135,8 +135,8 @@ router.put('/:id', isAuthenticated, isAllowed, async (req, res) => {
     lastName: Joi.string()
       .trim()
       .required(),
-    city: Joi.string().trim(),
-    country: Joi.string().trim(),
+    city: Joi.string().trim().allow(''),
+    country: Joi.string().trim().allow(''),
     category: Joi.string(),
     subCategories: Joi.array().items(Joi.string()),
   });

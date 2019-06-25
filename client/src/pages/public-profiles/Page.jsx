@@ -57,7 +57,7 @@ function PublicProfiles({ enqueueSnackbar }) {
 
   useEffect(() => {
     setPage(1);
-  }, [filters.searchTerm]);
+  }, [filters.searchTerm, filters.subCategories, filters.categories]);
 
   const handleLoadMore = () => {
     loadProfiles({ currentPage: page + 1, appendOn: profiles });

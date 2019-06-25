@@ -74,7 +74,7 @@ function reducer(state, action) {
   }
 }
 
-function PasswordForm({ enqueueSnackbar }) {
+function PasswordForm({ enqueueSnackbar, uid }) {
   const classes = useStyles();
 
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -115,7 +115,11 @@ function PasswordForm({ enqueueSnackbar }) {
     if (validateInputs()) {
       const { newPassword, oldPassword } = state.inputs;
       try {
-        await axios.post('/auth/change-password', {
+        const apiPath = location.pathname.includes('/admin/edit-profile/')
+          ? `/auth/admin/change-user-password/${uid}`
+          : '/auth/change-password';
+
+        await axios.post(apiPath, {
           newPassword,
           oldPassword,
         });

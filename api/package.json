@@ -6,7 +6,7 @@
     "start": "NODE_ENV=local node ./bin/www",
     "dev": "NODE_ENV=local nodemon ./bin/www",
     "debug": "NODE_ENV=local nodemon --inspect ./bin/www",
-    "test": "LOG_LEVEL=error SILENCE_ERRORS=true NODE_ENV=test jest  --verbose --bail --runInBand --forceExit",
+    "test": "NODE_ENV=test LOG_LEVEL=error SILENCE_ERRORS=true jest  --verbose --bail --runInBand --detectOpenHandles --forceExit",
     "test:dev": "NODE_ENV=test jest --detectOpenHandles --forceExit --verbose --bail --runInBand"
   },
   "dependencies": {

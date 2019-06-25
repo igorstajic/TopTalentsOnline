@@ -238,7 +238,7 @@ function InfoForm({ enqueueSnackbar, profileData }: { profileData: Object, enque
               label="Category"
               placeholder="Choose..."
               value={state.profile.category}
-              onSelect={selected => 
+              onSelect={selected =>
                 dispatch({
                   type: actions.UPDATE_PROFILE,
                   payload: {

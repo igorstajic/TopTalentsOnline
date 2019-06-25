@@ -64,6 +64,7 @@ export default function Filters({ setFilters }) {
         const getFiltersResponse = await axios.get('/filters/all');
         setAllCategories(union(getFiltersResponse.data.categories, defaultCategories));
         setAllSubCategories(union(getFiltersResponse.data.subCategories, defaultSubCategories));
+      // eslint-disable-next-line no-empty
       } catch (error) {}
     };
     getAdditionalFilters();

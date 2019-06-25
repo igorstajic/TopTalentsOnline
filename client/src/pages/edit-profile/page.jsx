@@ -57,7 +57,7 @@ function EditProfile({ uid, enqueueSnackbar }: { uid: string, enqueueSnackbar: F
       }
     }
     getProfileData();
-  }, [enqueueSnackbar, uid]);
+  }, [enqueueSnackbar, uid, activeTab]);
   return (
     <>
       {isLoading && (
@@ -80,14 +80,14 @@ function EditProfile({ uid, enqueueSnackbar }: { uid: string, enqueueSnackbar: F
             {activeTab === 0 && (
               <Fade in={true}>
                 <Paper className={classes.tabContent}>
-                  <InfoForm profileData={profileData} />
+                  <InfoForm profileData={profileData} setProfileData={setProfileData} />
                 </Paper>
               </Fade>
             )}
             {activeTab === 1 && (
               <Fade in={true}>
                 <Paper className={classes.tabContent}>
-                  <PasswordForm />
+                  <PasswordForm uid={uid}/>
                 </Paper>
               </Fade>
             )}
