@@ -10,6 +10,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { withSnackbar } from 'notistack';
 
 import axios from '../configs/axios';
+import { emailValidatior } from '../helpers/validators';
 
 const useStyles = makeStyles(theme => ({
   message: {
@@ -33,7 +34,6 @@ function ContactFormDialog({ uid, isOpen, handleClose, enqueueSnackbar }) {
 
   const validateInputs = useCallback(() => {
     let isValid = false;
-    const emailValidatior = /\S+@\S+\.\S+/;
     if (email.trim().length === 0) {
       setEmailErrorMessage('Email is required');
     } else if (!emailValidatior.test(email)) {

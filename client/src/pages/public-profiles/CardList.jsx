@@ -18,6 +18,7 @@ import IconButton from '@material-ui/core/IconButton';
 import RouterLink from '../../components/RouterLink';
 import ContactForm from '../../components/ContactForm';
 import { SessionContext } from '../../services/session';
+import { makeLocationString } from '../../helpers/formatters';
 
 const useStyles = makeStyles(theme => ({
   cardList: {
@@ -47,6 +48,11 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     marginBottom: theme.spacing(2),
   },
+  noProfiles: {
+    marginTop: theme.spacing(5),
+    textAlign: 'center',
+    width: '100%',
+  },
 }));
 
 export default function CardList({ profiles }) {
@@ -58,55 +64,62 @@ export default function CardList({ profiles }) {
 
   return (
     <Grid className={classes.cardList} container item spacing={2}>
-      {profiles.map(profile => (
-        <Grid className={classes.cardWrapper} key={profile.id} item xs={12} sm={6} md={4}>
-          <Zoom in={true}>
-            <Card className={classes.card}>
-              <CardHeader
-                action={
-                  <IconButton component={RouterLink} to={`/profile/${profile.id}`} aria-label="Settings">
-                    <InfoIcon />
-                  </IconButton>
-                }
-                title={`${profile.firstName} ${profile.lastName}`}
-                subheader={<span className={classes.cardHeader__subtitle}>{`${profile.category}`}</span>}
-              />
-              <CardContent className={classes.card__content}>
-                <Typography className={classes.location} component="p" variant="body1">
-                  <LocationIcon color="action" /> {`${profile.city}, ${profile.country}`}
-                </Typography>
+      {profiles.length > 0 ? (
+        profiles.map(profile => (
+          <Grid className={classes.cardWrapper} key={profile.id} item xs={12} sm={6} md={4}>
+            <Zoom in={true}>
+              <Card className={classes.card}>
+                <CardHeader
+                  action={
+                    <IconButton component={RouterLink} to={`/profile/${profile.id}`} aria-label="Settings">
+                      <InfoIcon />
+                    </IconButton>
+                  }
+                  title={`${profile.firstName} ${profile.lastName}`}
+                  subheader={<span className={classes.cardHeader__subtitle}>{profile.category}</span>}
+                />
+                <CardContent className={classes.card__content}>
+                  <Typography className={classes.location} component="p" variant="body1">
+                    {(profile.city || profile.country) && <LocationIcon color="action" />}
+                    {makeLocationString(profile.city, profile.country)}
+                  </Typography>
 
-                {profile.subCategories.length > 0 && <Typography component="h4">Skills:</Typography>}
-                {profile.subCategories.map((skill, idx) => (
-                  <Chip className={classes.chip} color="secondary" key={`${skill}_${idx}`} label={skill} />
-                ))}
-              </CardContent>
-              <CardActions>
-                <Button
-                  color="primary"
-                  size="small"
-                  onClick={() => {
-                    setSelectedProfile(profile);
-                    showContactForm(true);
-                  }}
-                >
-                  Contact
-                </Button>
-                {session.currentUser && session.currentUser.type === 'admin' && (
-                  <Button color="secondary" size="small" component={RouterLink} to={`/admin/edit-profile/${profile.id}`}>
-                    Edit
+                  {profile.subCategories.length > 0 && <Typography component="h4">Skills:</Typography>}
+                  {profile.subCategories.map((skill, idx) => (
+                    <Chip className={classes.chip} color="secondary" key={`${skill}_${idx}`} label={skill} />
+                  ))}
+                </CardContent>
+                <CardActions>
+                  <Button
+                    color="primary"
+                    size="small"
+                    onClick={() => {
+                      setSelectedProfile(profile);
+                      showContactForm(true);
+                    }}
+                  >
+                    Contact
                   </Button>
-                )}
-                {session.currentUser && session.currentUser.type === 'admin' && (
-                  <Button color="secondary" size="small" component={RouterLink} to={`/admin/messages/${profile.id}`}>
-                    Messages
-                  </Button>
-                )}
-              </CardActions>
-            </Card>
-          </Zoom>
-        </Grid>
-      ))}
+                  {session.currentUser && session.currentUser.type === 'admin' && (
+                    <Button color="secondary" size="small" component={RouterLink} to={`/admin/edit-profile/${profile.id}`}>
+                      Edit
+                    </Button>
+                  )}
+                  {session.currentUser && session.currentUser.type === 'admin' && (
+                    <Button color="secondary" size="small" component={RouterLink} to={`/admin/messages/${profile.id}`}>
+                      Messages
+                    </Button>
+                  )}
+                </CardActions>
+              </Card>
+            </Zoom>
+          </Grid>
+        ))
+      ) : (
+        <Typography component="span" variant="body1" className={classes.noProfiles} color="textSecondary">
+          No profiles.
+        </Typography>
+      )}
       <ContactForm uid={selectedProfile.id} isOpen={isShowingContactForm} handleClose={() => showContactForm(false)} />
     </Grid>
   );

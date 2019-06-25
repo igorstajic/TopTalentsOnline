@@ -6,6 +6,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Divider from '@material-ui/core/Divider';
+import Box from '@material-ui/core/Box';
+
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
@@ -85,8 +87,8 @@ function Inbox({ enqueueSnackbar, uid }: { uid: string, enqueueSnackbar: Functio
           {messages.length > 0 ? (
             <List className={classes.list}>
               {messages.map((messageItem, idx) => (
-                <>
-                  <ListItem alignItems="flex-start">
+                <Box key={`item_${messageItem.id}`}>
+                  <ListItem  alignItems="flex-start">
                     <ListItemAvatar>
                       <Avatar>{`${messageItem.contactName.split(' ').reduce((initials, word) => `${initials}${word[0]}`, '')}`}</Avatar>
                     </ListItemAvatar>
@@ -107,8 +109,8 @@ function Inbox({ enqueueSnackbar, uid }: { uid: string, enqueueSnackbar: Functio
                       </IconButton>
                     </ListItemSecondaryAction>
                   </ListItem>
-                  {idx < messages.length - 1 && <Divider variant="inset" component="li" />}
-                </>
+                  {idx < messages.length - 1 && <Divider key={`divider_${messageItem.id}`} variant="inset" component="li" />}
+                </Box>
               ))}
             </List>
           ) : (

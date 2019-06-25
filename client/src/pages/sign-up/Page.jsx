@@ -15,6 +15,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 import RouterLink from '../../components/RouterLink';
 import axios from '../../configs/axios';
+
+import { emailValidatior } from '../../helpers/validators';
 import { SessionContext, authenticateSession } from '../../services/session';
 
 const useStyles = makeStyles(theme => ({
@@ -64,7 +66,6 @@ function SignUp({ history, enqueueSnackbar }: { history: Object, enqueueSnackbar
 
   const validateInputs = useCallback(() => {
     let isValid = false;
-    const emailValidatior = /\S+@\S+\.\S+/;
 
     if (firstName.trim().length === 0) {
       setFirstNameErrorMessage('First name is required');

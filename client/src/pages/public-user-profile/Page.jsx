@@ -18,6 +18,7 @@ import axios from '../../configs/axios';
 import LoadingIndicator from '../../layout/LoadingIndicator';
 import ContactForm from '../../components/ContactForm';
 
+import { makeLocationString } from '../../helpers/formatters';
 const useStyles = makeStyles(theme => ({
   paper: {
     padding: theme.spacing(8),
@@ -58,18 +59,6 @@ function PublicUserProfile({ match, enqueueSnackbar }) {
     getProfileData();
   }, [enqueueSnackbar, match.params.uid]);
 
-  const makeLocationString = (city = '', country = '') => {
-    if (city.length && country.length) {
-      return `${city}, ${country}`;
-    }
-    if (city.length) {
-      return `${city}`;
-    }
-    if (country.length) {
-      return `${country}`;
-    }
-    return '';
-  };
   return (
     <Container maxWidth="md" component="section">
       {isLoading ? (
