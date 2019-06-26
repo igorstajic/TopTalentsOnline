@@ -137,7 +137,7 @@ router.put('/:id', isAuthenticated, isAllowed, async (req, res) => {
       .required(),
     city: Joi.string().trim().allow(''),
     country: Joi.string().trim().allow(''),
-    category: Joi.string(),
+    category: Joi.string().allow(''),
     subCategories: Joi.array().items(Joi.string()),
   });
   const { error: validationError, value: validatedRequestBody } = Joi.validate(req.body, requestSchema);

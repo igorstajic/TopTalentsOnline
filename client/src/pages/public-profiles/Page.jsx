@@ -37,11 +37,9 @@ function PublicProfiles({ enqueueSnackbar }) {
             filters.searchTerm
           }&page=${currentPage}&limit=3`
         );
-        if (appendOn) {
-          setProfiles([...appendOn, ...getProfilesResponse.data.users]);
-        } else {
-          setProfiles(getProfilesResponse.data.users);
-        }
+
+        setProfiles([...appendOn, ...getProfilesResponse.data.users]);
+
         setHasMore(getProfilesResponse.data.hasMore);
         setIsLoading(false);
         setIsLoadingMore(false);
@@ -65,7 +63,7 @@ function PublicProfiles({ enqueueSnackbar }) {
   };
 
   return (
-    <Container maxWidth="lg" component="section" data-test="page_container__publicProfiles">
+    <Container maxWidth="lg" component="section" data-testid="page_container__publicProfiles">
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Filters setFilters={setFilters} />
@@ -73,7 +71,7 @@ function PublicProfiles({ enqueueSnackbar }) {
         {isLoading ? (
           <LoadingIndicator />
         ) : (
-          <Container maxWidth="md" component="section">
+          <Container maxWidth="md" component="section" data-testid="container__profileCards">
             <List profiles={profiles} />
             {hasMore && (
               <Box display="flex" justifyContent="center">

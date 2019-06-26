@@ -280,7 +280,7 @@ function InfoForm({ enqueueSnackbar, profileData }: { profileData: Object, enque
       <Grid className={classes.deleteActionContainer} container justify="flex-end">
         <Grid item>
           <Button
-            data-test="action__delete"
+            data-testid="action__delete"
             onClick={() => dispatch({ type: actions.TOGGLE_DELETE_DIALOG })}
             variant="contained"
             color="secondary"
@@ -302,7 +302,7 @@ function InfoForm({ enqueueSnackbar, profileData }: { profileData: Object, enque
               <Button onClick={() => dispatch({ type: actions.TOGGLE_DELETE_DIALOG })} color="primary">
                 Cancel
               </Button>
-              <Button data-test="action__confirmDelete" onClick={() => handleDeleteProfile(profileData.id)} color="primary" autoFocus>
+              <Button data-testid="action__confirmDelete" onClick={() => handleDeleteProfile(profileData.id)} color="primary" autoFocus>
                 Confirm
               </Button>
             </DialogActions>

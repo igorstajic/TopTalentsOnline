@@ -60,7 +60,7 @@ function PublicUserProfile({ match, enqueueSnackbar }) {
   }, [enqueueSnackbar, match.params.uid]);
 
   return (
-    <Container maxWidth="md" component="section" data-test="page_container__publicProfile">
+    <Container maxWidth="md" component="section" data-testid="page_container__publicProfile">
       {isLoading ? (
         <LoadingIndicator />
       ) : (

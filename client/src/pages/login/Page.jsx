@@ -93,7 +93,7 @@ function Login({ enqueueSnackbar }: { enqueueSnackbar: Function }) {
 
   return (
     <Fade in={true}>
-      <Container component="section" maxWidth="xs" data-test="page_container__login">
+      <Container component="section" maxWidth="xs" data-testid="page_container__login">
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
@@ -103,7 +103,7 @@ function Login({ enqueueSnackbar }: { enqueueSnackbar: Function }) {
           </Typography>
           <form className={classes.form} noValidate onSubmit={onSubmit}>
             <TextField
-              inputProps={{ 'data-test': 'input__email' }}
+              inputProps={{ 'data-testid': 'input__email' }}
               variant="outlined"
               type="email"
               margin="normal"
@@ -120,7 +120,7 @@ function Login({ enqueueSnackbar }: { enqueueSnackbar: Function }) {
               onChange={ev => setEmail(ev.target.value)}
             />
             <TextField
-              inputProps={{ 'data-test': 'input__password' }}
+              inputProps={{ 'data-testid': 'input__password' }}
               variant="outlined"
               margin="normal"
               required
@@ -135,12 +135,12 @@ function Login({ enqueueSnackbar }: { enqueueSnackbar: Function }) {
               error={passwordErrorMessage.length > 0}
               helperText={passwordErrorMessage}
             />
-            <Button data-test="action__submit" type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
+            <Button data-testid="action__submit" type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
               Sign In
             </Button>
             <Grid container justify="flex-end">
               <Grid item>
-                <Link data-test="link__signup" component={RouterLink} to="/sign-up" variant="body2">
+                <Link data-testid="link__signup" component={RouterLink} to="/sign-up" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>

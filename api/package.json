@@ -6,8 +6,7 @@
     "start": "npm run dev",
     "dev": "NODE_ENV=local nodemon ./bin/www",
     "debug": "NODE_ENV=local nodemon --inspect ./bin/www",
-    "test": "NODE_ENV=test LOG_LEVEL=error SILENCE_ERRORS=true jest  --verbose --bail --runInBand --detectOpenHandles --forceExit",
-    "test:dev": "NODE_ENV=test jest --detectOpenHandles --forceExit --verbose --bail --runInBand"
+    "test": "NODE_ENV=test jest --detectOpenHandles --forceExit --verbose --bail --runInBand"
   },
   "dependencies": {
     "@hapi/joi": "^15.0.3",
