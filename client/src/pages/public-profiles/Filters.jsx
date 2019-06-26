@@ -105,7 +105,7 @@ export default function Filters({ setFilters }) {
               options={allCategories}
               label="Categories"
               isMulty
-              placeholder="Filter..."
+              placeholder="Type to search..."
               value={searchCategories}
               onSelect={selected => setSearchCategories(selected)}
             />
@@ -116,7 +116,7 @@ export default function Filters({ setFilters }) {
               options={allSubCategories}
               label="Skills"
               isMulty
-              placeholder="Add..."
+              placeholder="Type to search..."
               value={searchSubCategories}
               onSelect={selected => setSearchSubCategories(selected)}
             />

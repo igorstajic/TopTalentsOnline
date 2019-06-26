@@ -139,7 +139,7 @@ function SignUp({ history, enqueueSnackbar }: { history: Object, enqueueSnackbar
 
   return (
     <Fade in={true}>
-      <Container component="section" maxWidth="xs">
+      <Container component="section" maxWidth="xs" data-test="page_container__signup">
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
@@ -153,6 +153,7 @@ function SignUp({ history, enqueueSnackbar }: { history: Object, enqueueSnackbar
                 <TextField
                   name="firstName"
                   variant="outlined"
+                  inputProps={{"data-test":"input__firstName"}}
                   required
                   fullWidth
                   id="firstName"
@@ -169,6 +170,7 @@ function SignUp({ history, enqueueSnackbar }: { history: Object, enqueueSnackbar
                   variant="outlined"
                   required
                   fullWidth
+                  inputProps={{"data-test":"input__lastName"}}
                   id="lastName"
                   label="Last Name"
                   name="lastName"
@@ -183,6 +185,7 @@ function SignUp({ history, enqueueSnackbar }: { history: Object, enqueueSnackbar
                   variant="outlined"
                   required
                   fullWidth
+                  inputProps={{"data-test":"input__email"}}
                   id="email"
                   label="Email Address"
                   name="email"
@@ -197,6 +200,7 @@ function SignUp({ history, enqueueSnackbar }: { history: Object, enqueueSnackbar
                   variant="outlined"
                   required
                   fullWidth
+                  inputProps={{"data-test":"input__password"}}
                   name="password"
                   label="Password"
                   type="password"
@@ -212,6 +216,7 @@ function SignUp({ history, enqueueSnackbar }: { history: Object, enqueueSnackbar
                   variant="outlined"
                   required
                   fullWidth
+                  inputProps={{"data-test":"input__passwordConfirmation"}}
                   name="passwordConfirmation"
                   label="Confirm Password"
                   type="password"
@@ -223,7 +228,7 @@ function SignUp({ history, enqueueSnackbar }: { history: Object, enqueueSnackbar
                 />
               </Grid>
             </Grid>
-            <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
+            <Button data-test="action__submit" type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
               Sign Up
             </Button>
             <Grid container justify="flex-end">

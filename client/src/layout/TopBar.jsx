@@ -51,6 +51,7 @@ export default function TopBar() {
           )}
           {session.currentUser ? (
             <IconButton
+              data-test="action__showAccountMenu"
               onClick={ev => setMenuAnchor(ev.currentTarget)}
               aria-label="Account of current user"
               aria-controls="account-menu"
@@ -73,10 +74,15 @@ export default function TopBar() {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem component={RouterLink} to={`/profile/${session.currentUser.id}`} onClick={handleMenuClose}>
+              <MenuItem
+                data-test="link__myProfile"
+                component={RouterLink}
+                to={`/profile/${session.currentUser.id}`}
+                onClick={handleMenuClose}
+              >
                 My Profile
               </MenuItem>
-              <MenuItem component={RouterLink} to="/edit-profile" onClick={handleMenuClose}>
+              <MenuItem data-test="link__profileEdit" component={RouterLink} to="/edit-profile" onClick={handleMenuClose}>
                 Edit Profile
               </MenuItem>
               <MenuItem onClick={handleLogout}>Logout</MenuItem>

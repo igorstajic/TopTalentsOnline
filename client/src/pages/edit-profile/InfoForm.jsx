@@ -172,9 +172,15 @@ function InfoForm({ enqueueSnackbar, profileData }: { profileData: Object, enque
     });
   };
 
-  const handleDeleteProfile = () => {
-    session.setCurrentUser(null);
-    clearSession();
+  const handleDeleteProfile = async uid => {
+    try {
+      await axios.delete(`users/${uid}`);
+      session.setCurrentUser(null);
+      enqueueSnackbar('Profile deleted!', { variant: 'success' });
+      clearSession();
+    } catch (error) {
+      enqueueSnackbar(error.response.data.details || 'Something went wrong!', { variant: 'error' });
+    }
   };
 
   return (
@@ -274,6 +280,7 @@ function InfoForm({ enqueueSnackbar, profileData }: { profileData: Object, enque
       <Grid className={classes.deleteActionContainer} container justify="flex-end">
         <Grid item>
           <Button
+            data-test="action__delete"
             onClick={() => dispatch({ type: actions.TOGGLE_DELETE_DIALOG })}
             variant="contained"
             color="secondary"
@@ -295,7 +302,7 @@ function InfoForm({ enqueueSnackbar, profileData }: { profileData: Object, enque
               <Button onClick={() => dispatch({ type: actions.TOGGLE_DELETE_DIALOG })} color="primary">
                 Cancel
               </Button>
-              <Button onClick={handleDeleteProfile} color="primary" autoFocus>
+              <Button data-test="action__confirmDelete" onClick={() => handleDeleteProfile(profileData.id)} color="primary" autoFocus>
                 Confirm
               </Button>
             </DialogActions>

@@ -65,7 +65,7 @@ function PublicProfiles({ enqueueSnackbar }) {
   };
 
   return (
-    <Container maxWidth="lg" component="section">
+    <Container maxWidth="lg" component="section" data-test="page_container__publicProfiles">
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Filters setFilters={setFilters} />

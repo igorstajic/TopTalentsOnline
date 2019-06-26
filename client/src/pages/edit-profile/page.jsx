@@ -66,7 +66,7 @@ function EditProfile({ uid, enqueueSnackbar }: { uid: string, enqueueSnackbar: F
         </Fade>
       )}
       <Fade in={!isLoading}>
-        <Container component="section" maxWidth="sm">
+        <Container component="section" maxWidth="sm" data-test="page_container__profileEdit">
           <div className={classes.paper}>
             <Typography className={classes.title} component="h1" variant="h4">
               Edit Profile
