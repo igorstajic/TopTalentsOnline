@@ -1,6 +1,6 @@
 # TopTalentsOnline
 
-TopTalentsOnline is a community web application where you can find IT professionals and contact them. They can see the listing of IT experts categorized by their main skills and subskills.
+React / Node application where you can find IT professionals and contact them. They can see the listing of IT experts categorized by their main skills and subskills.
 
 A visitor can search through the websites and browse developers by categories (e.g. web developer, data developer, mobile developer) and subcategories (React, Angular, Python, Rails, Node.js, Go; Oracle, SQL Server, ETL, Data, Machine Learning; iOS, Android, ...)
 
